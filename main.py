@@ -3,29 +3,52 @@ class User:
         self.name = name
         self.id = id
 
+
 class Admin(User):
-    def __init__(self, name, id, admin_id):
-        super().__init__(name, id)  # Инициализация родительского класса User
-        self.users = []  # Список пользователей
-        self.admin_id = admin_id  # Идентификатор администратора
+    def __init__(self, name, id, admin):
+        super().__init__(name, id)
+        self._admin = admin
+        self.users = []
 
     def dostup(self):
-        public_access = f"{self.name} - публичный доступ"
-        private_access = f"{self.admin_id} - приватный доступ"
-        return public_access, private_access
+        self.public = f"{self.users} - публичный доступ"
+        self.__private = f"{self.admin} - приватный доступ"
 
     def add_user(self, name, id):
         new_user = User(name, id)
-        self.users.append(new_user)  # Добавляем нового пользователя в список
+        self.users.append(new_user)
 
     def remove_user(self, name, id):
-        user_to_remove = None
         for user in self.users:
             if user.name == name and user.id == id:
-                user_to_remove = user
+                self.users.remove(user)
                 break
-        if user_to_remove:
-            self.users.remove(user_to_remove)  # Удаляем пользователя из списка
 
     def list_users(self):
-        return [(user.name, user.id) for user in self.users]  # Возвращаем список пользователей
+        return [(user.name, user.id) for user in self.users]
+
+    def get_users(self):
+        return [(user.name, user.id) for user in self.users]
+
+    def get_admin(self):
+        return self._admin
+
+
+admin = Admin("Алексей", 7, "Админ")
+admin.add_user("Степан", 4)
+
+admin.add_user("Сергей", 3)
+
+admin.add_user("Николай", 2)
+
+admin.add_user("Наталья", 1)
+
+print("Список пользователей: ", admin.get_users())
+
+admin.remove_user("Николай", 2)
+
+print("Список пользователей после удаления: ", admin.get_users())
+
+print("Администратор: ", admin.get_admin())
+
+
